@@ -39,8 +39,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             // Set an accuracy level. The higher, the better for energy.
             locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
             
-            // Enable automatic pausing
-            locationManager.pausesLocationUpdatesAutomatically = true;
+            // Disable automatic pausing
+            locationManager.pausesLocationUpdatesAutomatically = false;
             
             // Specify the type of activity your app is currently performing
             locationManager.activityType = CLActivityType.fitness;
@@ -52,7 +52,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let userLocation:CLLocation = locations[0] as CLLocation
+        let userLocation:CLLocation = locations.last! as CLLocation
         
         // Call stopUpdatingLocation() to stop listening for location updates,
         // other wise this function will be called every time when user location changes.
@@ -63,7 +63,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("user longitude = \(userLocation.coordinate.longitude)")
         
         let tStamp = Date().timeIntervalSince1970
-        if (tStamp - lastSendTime > 120) {
+        if (tStamp - lastSendTime > 60) {
             lastSendTime = tStamp
             sendPhoneInformation(latitude:userLocation.coordinate.latitude, longitude:userLocation.coordinate.longitude)
         }
@@ -127,5 +127,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         })
         task.resume()
     }
+    
 }
 
